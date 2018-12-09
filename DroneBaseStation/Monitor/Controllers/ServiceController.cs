@@ -1,17 +1,16 @@
-﻿using System.ServiceProcess;
-using System.Threading;
-using System.Web.Http;
-using System.Runtime.Caching;
-using SP = System.ServiceProcess;
+﻿using Monitor.Service;
 using System;
-using Monitor.Service;
+using System.Runtime.Caching;
+using System.ServiceProcess;
+using System.Web.Http;
+using SP = System.ServiceProcess;
 
 namespace Monitor.Controllers
 {
 	[RoutePrefix("api/Service")]
 	public class ServiceController : ApiController
 	{
-		private const string ServiceCacheName = nameof(Service.DroneControllerService);
+		private const string ServiceCacheName = nameof(RadioRelayService);
 
 		private static SP.ServiceController RetrieveService()
 		{
@@ -40,7 +39,7 @@ namespace Monitor.Controllers
 			{
 				try
 				{
-					Service.DroneControllerService service = new Service.DroneControllerService(comId);
+					RadioRelayService service = new RadioRelayService(comId);
 					service.Start();
 					MemoryCache.Default.Add(ServiceCacheName, service, DateTime.Now.AddYears(1));
 				}
@@ -54,7 +53,7 @@ namespace Monitor.Controllers
 		{
 			if (MemoryCache.Default.Contains(ServiceCacheName))
 			{
-				Service.DroneControllerService service = (Service.DroneControllerService)MemoryCache.Default.Get(ServiceCacheName);
+				RadioRelayService service = (RadioRelayService)MemoryCache.Default.Get(ServiceCacheName);
 				service.Stop();
 				MemoryCache.Default.Remove(ServiceCacheName);
 			}
@@ -67,8 +66,8 @@ namespace Monitor.Controllers
 			if (MemoryCache.Default.Contains(ServiceCacheName))
 			{
 				// Make this more robust to send a message to the Teensy to ask if it's running.
-				Service.DroneControllerService service = (Service.DroneControllerService)MemoryCache.Default.Get(ServiceCacheName);
-				return service.IsRunning;
+				RadioRelayService service = (RadioRelayService)MemoryCache.Default.Get(ServiceCacheName);
+				return service.IsRelayConnected();
 			}
 			else
 			{

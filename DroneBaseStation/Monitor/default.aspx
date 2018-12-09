@@ -34,7 +34,7 @@
             </div>
 
             <div>
-                <span>Controller Service:</span>
+                <span>Radio Relay Service:</span>
                 <span id="serviceStatus"></span>
                 <br />
                 <select id="comList" name="comId">

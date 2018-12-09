@@ -2,12 +2,15 @@
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Threading;
+using System.Threading.Tasks;
 using DroneControllerHardware;
 
 namespace Monitor.Service
 {
-	public class DroneControllerService
+	public class RadioRelayService
 	{
+		private delegate void ConnectionMessageReceivedDelegate();
+
 		private SerialPort _comPort;
 
 		private DroneController _controller;
@@ -17,9 +20,11 @@ namespace Monitor.Service
 
 		private Thread _workerThread;
 
+		private event ConnectionMessageReceivedDelegate ConnectionMessageReceived;
+
 		public bool IsRunning { get; private set; }
 
-		public DroneControllerService(int comPortId)
+		public RadioRelayService(int comPortId)
 		{
 			string portName = "COM" + comPortId;
 
@@ -68,6 +73,37 @@ namespace Monitor.Service
 			IsRunning = false;
 		}
 
+		public bool IsRelayConnected()
+		{
+			byte[] buffer = new[] { Convert.ToByte('C') };
+			bool isConnected = false;
+
+			ConnectionMessageReceivedDelegate callback = () =>
+			{
+				isConnected = true;
+			};
+
+			this.ConnectionMessageReceived += callback;
+
+			Task task = Task.Run(() =>
+			{
+				while (!isConnected) { Thread.Sleep(10); }
+			});
+
+			_comPort.Write(buffer, 0, buffer.Length);
+
+			if (Task.WhenAny(task, Task.Delay(500)).Result == task)
+			{
+				this.ConnectionMessageReceived -= callback;
+				return true;
+			}
+			else
+			{
+				this.ConnectionMessageReceived -= callback;
+				return false;
+			}
+		}
+
 		private void SendControllerData()
 		{
 			while (!_serviceDone)
@@ -99,7 +135,20 @@ namespace Monitor.Service
 
 		private void ComDataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
-			// Do nothing for now. Don't know what the drone is going to return
+			while(_comPort.IsOpen && _comPort.BytesToRead > 0)
+			{
+				string line = _comPort.ReadLine().TrimEnd();
+
+				if (line == "Connected")
+				{
+					OnConnectionMessageReceived();
+				}
+			}
+		}
+
+		private void OnConnectionMessageReceived()
+		{
+			ConnectionMessageReceived?.Invoke();
 		}
 	}
 }

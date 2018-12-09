@@ -184,7 +184,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\DroneControllerService.cs" />
+    <Compile Include="Service\RadioRelayService.cs" />
     <Compile Include="Service\ServiceConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
