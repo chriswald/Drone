@@ -1,0 +1,48 @@
+body
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40pt;
+    vertical-align: middle;
+}
+
+select
+{
+	width: 100px;
+}
+
+#imagelist
+{
+    display: none;
+}
+
+.svg
+{
+    width: 36pt;
+    height: 36pt;
+    vertical-align: middle;
+}
+
+#batteryfull
+{
+    fill: green;
+}
+
+#batterymedium
+{
+    fill: gold;
+}
+
+#batterylow
+{
+    fill: darkorange;
+}
+
+#batteryempty
+{
+    fill: red;
+}
+
+td
+{
+	padding-right: 10px;
+}

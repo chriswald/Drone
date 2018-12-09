@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialPassthrough", "SerialPassthrough\SerialPassthrough.vcxproj", "{F4013B6B-41CA-4338-BE34-124F54398E08}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialSendFile", "SerialSendFile\SerialSendFile.vcxproj", "{95C4FF0F-7CD9-48F1-8581-8B570EF82CD6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialRunScript", "SerialRunScript\SerialRunScript.vcxproj", "{01150136-BC81-4435-9DE6-03CA47864156}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialGraph", "SerialGraph\SerialGraph.vcxproj", "{F4EC4BEC-789C-42B2-9B2F-205C58F62572}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4013B6B-41CA-4338-BE34-124F54398E08}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F4013B6B-41CA-4338-BE34-124F54398E08}.Debug|Win32.Build.0 = Debug|Win32
+		{F4013B6B-41CA-4338-BE34-124F54398E08}.Release|Win32.ActiveCfg = Release|Win32
+		{F4013B6B-41CA-4338-BE34-124F54398E08}.Release|Win32.Build.0 = Release|Win32
+		{95C4FF0F-7CD9-48F1-8581-8B570EF82CD6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95C4FF0F-7CD9-48F1-8581-8B570EF82CD6}.Debug|Win32.Build.0 = Debug|Win32
+		{95C4FF0F-7CD9-48F1-8581-8B570EF82CD6}.Release|Win32.ActiveCfg = Release|Win32
+		{95C4FF0F-7CD9-48F1-8581-8B570EF82CD6}.Release|Win32.Build.0 = Release|Win32
+		{01150136-BC81-4435-9DE6-03CA47864156}.Debug|Win32.ActiveCfg = Debug|Win32
+		{01150136-BC81-4435-9DE6-03CA47864156}.Debug|Win32.Build.0 = Debug|Win32
+		{01150136-BC81-4435-9DE6-03CA47864156}.Release|Win32.ActiveCfg = Release|Win32
+		{01150136-BC81-4435-9DE6-03CA47864156}.Release|Win32.Build.0 = Release|Win32
+		{F4EC4BEC-789C-42B2-9B2F-205C58F62572}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F4EC4BEC-789C-42B2-9B2F-205C58F62572}.Debug|Win32.Build.0 = Debug|Win32
+		{F4EC4BEC-789C-42B2-9B2F-205C58F62572}.Release|Win32.ActiveCfg = Release|Win32
+		{F4EC4BEC-789C-42B2-9B2F-205C58F62572}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
