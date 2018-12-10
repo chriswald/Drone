@@ -54,39 +54,3 @@ void ReturnConnectedPacket()
 {
     Serial.println("Connected");
 }
-
-// void loop() {
-//     byte incomingByte = 0;
-//     byte byteCount = 0;
-//     byte bufferPosition = 0;
-
-//     if (Serial.available() > 0)
-//     {
-//         byteCount = Serial.read();
-//         packetBuffer[bufferPosition++] = byteCount;
-
-//         for (byte i = bufferPosition; i < byteCount; i ++)
-//         {
-//             if (Serial.available() <= 0) { break; }
-
-//             incomingByte = Serial.read();
-//             packetBuffer[bufferPosition++] = incomingByte;
-//         }
-
-//         packetBuffer[byteCount] = 0;
-//     }
-
-//     // Echo the block back and reset the buffer
-//     if (bufferPosition > 0)
-//     {
-//         for (byte i = 0; i < byteCount; i ++)
-//         {
-//             Serial.print((char)packetBuffer[i]);
-//         }
-
-//         Serial.flush();
-//         while (Serial.available() > 0) { Serial.read(); }
-
-//         memset(packetBuffer, 0, bufferPosition);
-//     }
-// }
