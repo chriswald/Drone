@@ -32,8 +32,8 @@ namespace Monitor.Controllers
 		{
 			WebSocket socket = context.WebSocket;
 			CancellationTokenSource cts = new CancellationTokenSource();
-
-			await Task.Run(() => StreamDataToClient(socket, cts.Token));
+			
+			StreamDataToClient(socket, cts.Token);
 
 			ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[1024 * 4]);
 			WebSocketReceiveResult result;
@@ -47,23 +47,26 @@ namespace Monitor.Controllers
 			await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
 		}
 
-		private async Task StreamDataToClient(WebSocket socket, CancellationToken cancellationToken)
+		private void StreamDataToClient(WebSocket socket, CancellationToken cancellationToken)
 		{
-			while (!cancellationToken.IsCancellationRequested)
+			Task.Run(async () =>
 			{
-				DroneController droneController = new DroneController();
-				droneController.Update();
+				while (!cancellationToken.IsCancellationRequested)
+				{
+					DroneController droneController = new DroneController();
+					droneController.Update();
 
-				if (droneController.IsConnected)
-				{
-					await socket.SendAsync(new ArraySegment<byte>(droneController.GetBytes()), WebSocketMessageType.Binary, true, CancellationToken.None);
-					Thread.Sleep(10);
+					if (droneController.IsConnected)
+					{
+						await socket.SendAsync(new ArraySegment<byte>(droneController.GetBytes()), WebSocketMessageType.Binary, true, CancellationToken.None);
+						Thread.Sleep(10);
+					}
+					else
+					{
+						Thread.Sleep(100);
+					}
 				}
-				else
-				{
-					Thread.Sleep(100);
-				}
-			}
+			});
 		}
 	}
 }
