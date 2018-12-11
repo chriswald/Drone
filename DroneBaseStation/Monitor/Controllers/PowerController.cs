@@ -79,32 +79,14 @@ namespace Monitor.Controllers
 		[Route("Drone")]
 		public int GetDroneBatteryFakePercent()
 		{
-			try
-			{
-				string response = SendPipeMessage(ServiceConfiguration.DroneBatteryCommand);
-				return (int)Enum.GetValues(typeof(BatteryLevel)).GetValue(int.Parse(response));
-			}
-			catch { }
+			//try
+			//{
+			//	string response = SendPipeMessage(ServiceConfiguration.DroneBatteryCommand);
+			//	return (int)Enum.GetValues(typeof(BatteryLevel)).GetValue(int.Parse(response));
+			//}
+			//catch { }
 
 			return 0;
-		}
-
-		private string SendPipeMessage(object message)
-		{
-			NamedPipeClientStream pipeClient =
-					new NamedPipeClientStream(".", ServiceConfiguration.PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-			pipeClient.Connect(1000);
-
-			IFormatter formatter = new BinaryFormatter();
-			StreamReader sr = new StreamReader(pipeClient);
-			StreamWriter sw = new StreamWriter(pipeClient);
-
-			formatter.Serialize(sr.BaseStream, message);
-			string response = (string)formatter.Deserialize(sw.BaseStream);
-
-			pipeClient.Close();
-
-			return response;
 		}
 	}
 }
