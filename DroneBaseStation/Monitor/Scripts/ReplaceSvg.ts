@@ -2,19 +2,19 @@
 
 function ReplaceSvg(): void {
 	document.querySelectorAll('img.svg').forEach(function (img: any) {
-		var imgID = img.id;
-		var imgClass = img.className;
-		var imgURL = img.src;
+		let imgID: string = img.id;
+		let imgClass: string = img.className;
+		let imgURL: string = img.src;
 
-		fetch(imgURL).then(function (response) {
+		fetch(imgURL).then(function (response: Response) {
 			return response.text();
-		}).then(function (text) {
+		}).then(function (text: string) {
 
-			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(text, "text/xml");
+			let parser: DOMParser = new DOMParser();
+			let xmlDoc: Document = parser.parseFromString(text, "text/xml");
 
 			// Get the SVG tag, ignore the rest
-			var svg = xmlDoc.getElementsByTagName('svg')[0];
+			let svg: SVGSVGElement = xmlDoc.getElementsByTagName('svg')[0];
 
 			// Add replaced image's ID to the new SVG
 			if (typeof imgID !== 'undefined') {
