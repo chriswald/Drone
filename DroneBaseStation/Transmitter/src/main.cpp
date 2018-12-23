@@ -23,7 +23,8 @@ void loop()
 
         byte bufferPosition = 0;
 
-        while (Serial.available() > 0)
+        while ((Serial.available() > 0) && 
+                (bufferPosition < packetBufferSize))
         {
             packetBuffer[bufferPosition] = Serial.read();
             bufferPosition ++;
