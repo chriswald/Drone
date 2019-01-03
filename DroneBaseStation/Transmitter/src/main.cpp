@@ -1,7 +1,4 @@
-#include <Arduino.h>
-
-void ProcessPacket(char messageType, byte* buffer, byte byteCount);
-void ReturnConnectedPacket();
+#include "main.h"
 
 const int packetBufferSize = 256;
 byte* packetBuffer;
