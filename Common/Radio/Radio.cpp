@@ -21,8 +21,8 @@ void Radio::config(const char* rx, const char* tx, byte ce, byte csn, byte chan)
 
 void Radio::configInterrupt(void(*func)(void), byte pin, bool rx, bool tx, bool max_rt)
 {
-    pinMode(pin, INPUT);
-    attachInterrupt(pin, func, FALLING);
+    pinMode(pin, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(pin), func, FALLING);
 
     byte reg;
     readRegister(CONFIG, &reg, sizeof(byte));
