@@ -7,14 +7,14 @@ void ReceiveString(char *message);
 
 Radio *radio;
 const int packetBufferSize = 256;
-byte* packetBuffer;
+uint8_t* packetBuffer;
 
 // the setup routine runs once when you press reset:
 void setup() {
     // initialize serial communication at 9600 bits per second:
     Serial.begin(9600);
 
-    packetBuffer = (byte*)calloc(packetBufferSize, sizeof(byte));
+    packetBuffer = (uint8_t*)calloc(packetBufferSize, sizeof(uint8_t));
 
     radio = new Radio();
     radio->config("clie1", "serv1", RADIO_CE, RADIO_CSN);
@@ -28,7 +28,7 @@ void loop()
     {
         char messageType = Serial.read();
 
-        byte bufferPosition = 0;
+        uint8_t bufferPosition = 0;
 
         while ((Serial.available() > 0) && 
                 (bufferPosition < packetBufferSize))
@@ -44,7 +44,7 @@ void loop()
     }
 }
 
-void ProcessPacket(char messageType, byte* buffer, byte byteCount)
+void ProcessPacket(char messageType, uint8_t* buffer, uint8_t byteCount)
 {
     switch (messageType)
     {
@@ -59,10 +59,10 @@ void ProcessPacket(char messageType, byte* buffer, byte byteCount)
     }
 }
 
-void SendRadioMessage(byte* buffer, byte byteCount)
+void SendRadioMessage(uint8_t* buffer, uint8_t byteCount)
 {
     char message[] = "message";
-    uint8_t *data = (uint8_t*)calloc(0, sizeof(uint8_t) * 32);
+    uint8_t *data = (uint8_t*)calloc(32, sizeof(uint8_t));
     memcpy(data, message, strlen(message) + 1);
     radio->send(data);
 }
@@ -85,7 +85,7 @@ void ServerMessageReceived()
 
 void SendString(char *message)
 {
-    uint8_t *data = (uint8_t*)calloc(0, sizeof(uint8_t) * 32);
+    uint8_t *data = (uint8_t*)calloc(32, sizeof(uint8_t));
     memcpy(data, message, strlen(message) + 1);
     radio->send(data);
 }

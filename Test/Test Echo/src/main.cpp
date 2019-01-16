@@ -43,7 +43,7 @@ void ClientMessageReceived()
 
 void SendString(char *message)
 {
-    uint8_t *data = (uint8_t*)calloc(0, sizeof(uint8_t) * 32);
+    uint8_t *data = (uint8_t*)calloc(32, sizeof(uint8_t));
     memcpy(data, message, strlen(message) + 1);
     radio->send(data);
 }
