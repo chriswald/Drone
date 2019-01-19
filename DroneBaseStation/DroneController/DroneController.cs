@@ -15,15 +15,15 @@ namespace DroneControllerHardware
 		public const int Deadband = 2500;
 
 		public const byte PacketSize =
-			1 + 1 +             // Byte count
-			sizeof(float) + 1 + // Left Stick X
-			sizeof(float) + 1 + // Left Stick Y
-			sizeof(float) + 1 + // Right Stick X
-			sizeof(float) + 1 + // Right Stick Y
-			sizeof(byte) + 1 +  // Left trigger
-			sizeof(byte) + 1 +  // Right trigger
-			sizeof(Int32) + 1 + // Button flags
-			sizeof(byte) + 1;   // Battery level
+			1 +             // Byte count
+			sizeof(float) + // Left Stick X
+			sizeof(float) + // Left Stick Y
+			sizeof(float) + // Right Stick X
+			sizeof(float) + // Right Stick Y
+			sizeof(byte) +  // Left trigger
+			sizeof(byte) +  // Right trigger
+			sizeof(Int32) + // Button flags
+			sizeof(byte);   // Battery level
 
 		private Controller controller;
 		private Gamepad gamepad;
@@ -129,9 +129,7 @@ namespace DroneControllerHardware
 		}
 
 		public byte[] GetBytes()
-		{	
-			byte separator = 5;
-
+		{
 			byte[] buffer = new byte[PacketSize];
 
 			List<byte[]> fields = new List<byte[]>();
@@ -151,7 +149,6 @@ namespace DroneControllerHardware
 				int fieldLen = bytes.Length;
 				Array.Copy(bytes, 0, buffer, position, fieldLen);
 				position += fieldLen;
-				buffer[position++] = separator;
 			}
 
 			return buffer;
