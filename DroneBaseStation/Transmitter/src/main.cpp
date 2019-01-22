@@ -6,7 +6,7 @@ void SendString(char *message);
 void ReceiveString(char *message);
 
 Radio *radio;
-const int packetBufferSize = 256;
+const int packetBufferSize = 32;
 uint8_t* packetBuffer;
 
 // the setup routine runs once when you press reset:
@@ -26,8 +26,6 @@ void loop()
 {
     if (Serial.available() > 0)
     {
-        char messageType = Serial.read();
-
         uint8_t bufferPosition = 0;
 
         while ((Serial.available() > 0) && 
@@ -37,6 +35,7 @@ void loop()
             bufferPosition ++;
         }
 
+        char messageType = packetBuffer[0];
         ProcessPacket(messageType, packetBuffer, bufferPosition);
         
         // Clear the buffer
@@ -48,20 +47,21 @@ void ProcessPacket(char messageType, uint8_t* buffer, uint8_t byteCount)
 {
     switch (messageType)
     {
-        case 'R':   // Packet to be sent over the radio
-            SendRadioMessage(buffer, byteCount);
-            break;
         case 'C':   // Host checking if the device is connected
             ReturnConnectedPacket();
             break;
-        default:    // Anything else? Ignore the packet
+        default:
+            SendRadioMessage(buffer, byteCount);
             break;
     }
 }
 
 void SendRadioMessage(uint8_t* buffer, uint8_t byteCount)
 {
-    char message[] = "message";
+    char message[2];
+    message[0] = 'B';
+    message[1] = 1;
+    
     uint8_t *data = (uint8_t*)calloc(32, sizeof(uint8_t));
     memcpy(data, message, strlen(message) + 1);
     radio->send(data);
@@ -78,7 +78,7 @@ void ServerMessageReceived()
     {
         char message[32];
         ReceiveString(message);
-        Serial.print("Teensy received: ");
+        //Serial.print("Teensy received: ");
         Serial.println(message);
     }
 }
