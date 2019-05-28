@@ -5,3 +5,5 @@ obj/
 *.js
 *.js.map
 DroneBaseStation/Transmitter/.vscode/settings.json
+*.ipch
+DroneBaseStation/Transmitter/.vscode/ipch/
