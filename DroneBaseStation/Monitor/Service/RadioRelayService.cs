@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Threading;
@@ -26,6 +27,9 @@ namespace Monitor.Service
 		private volatile bool _serviceDone;
 
 		private Thread _workerThread;
+		private Thread _messageQueueThread;
+
+		private Queue<byte[]> _messageQueue = new Queue<byte[]>();
 
 		private event ConnectionMessageReceivedDelegate ConnectionMessageReceived;
 		private event ResponseMessageReceivedDelegate ResponseMessageReceived;
@@ -41,6 +45,7 @@ namespace Monitor.Service
 				_comPort = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
 				_comPort.DtrEnable = true;
 				_comPort.DataReceived += this.ComDataReceived;
+				_comPort.WriteTimeout = 500; // ms
 				_comPort.Open();
 			}
 			catch (Exception e)
@@ -60,6 +65,8 @@ namespace Monitor.Service
 				IsRunning = true;
 				_workerThread = new Thread(SendControllerData);
 				_workerThread.Start();
+				_messageQueueThread = new Thread(MessageQueueThread);
+				_messageQueueThread.Start();
 			}
 			else
 			{
@@ -74,6 +81,12 @@ namespace Monitor.Service
 			if (_workerThread != null)
 			{
 				_workerThread.Join();
+			}
+
+			if (_messageQueueThread != null)
+			{
+				_messageQueueThread.Join();
+				_messageQueue.Clear();
 			}
 
 			_comPort.Close();
@@ -98,7 +111,7 @@ namespace Monitor.Service
 				while (!isConnected) { Thread.Sleep(10); }
 			});
 
-			SendData(buffer);
+			EnqueueData(buffer);
 
 			if (Task.WhenAny(task, Task.Delay(500)).Result == task)
 			{
@@ -141,7 +154,7 @@ namespace Monitor.Service
 				while (!gotBatteryLevel) { Thread.Sleep(10); }
 			});
 
-			SendData(buffer);
+			EnqueueData(buffer);
 
 			if (Task.WhenAny(task, Task.Delay(500)).Result == task)
 			{
@@ -156,11 +169,42 @@ namespace Monitor.Service
 			}
 		}
 
+		private void EnqueueData(byte[] data)
+		{
+			lock(_messageQueue)
+			{
+				_messageQueue.Enqueue(data);
+			}
+		}
+
+		private byte[] DequeueData()
+		{
+			lock(_messageQueue)
+			{
+				return _messageQueue.Dequeue();
+			}
+		}
+
+		private bool QueueHasData()
+		{
+			lock(_messageQueue)
+			{
+				return _messageQueue.Count > 0;
+			}
+		}
+
 		private void SendData(byte[] data)
 		{
 			if (!_serviceDone)
 			{
-				_comPort.Write(data, 0, data.Length);
+				try
+				{
+					_comPort.Write(data, 0, data.Length);
+				}
+				catch (Exception e)
+				{
+					EventLog.WriteEntry(this.GetType().Name, $"Exception thrown writing to {_comPort.PortName}:{Environment.NewLine}{e.ToString()}", EventLogEntryType.Error);
+				}
 			}
 		}
 
@@ -178,7 +222,7 @@ namespace Monitor.Service
 
 					_controller.Update();
 					byte[] buffer = _controller.GetBytes();
-					_comPort.Write(buffer, 0, buffer.Length);
+					EnqueueData(buffer);
 				}
 				else
 				{
@@ -189,7 +233,19 @@ namespace Monitor.Service
 					}
 				}
 
-				Thread.Sleep(10);
+				Thread.Sleep(50);
+			}
+		}
+
+		private void MessageQueueThread()
+		{
+			while (!_serviceDone)
+			{
+				if (QueueHasData() && _comPort.IsOpen)
+				{
+					byte[] data = DequeueData();
+					SendData(data);
+				}
 			}
 		}
 
