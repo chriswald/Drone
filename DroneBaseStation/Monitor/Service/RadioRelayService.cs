@@ -9,7 +9,14 @@ namespace Monitor.Service
 {
 	public class RadioRelayService
 	{
+		public enum DroneBattery
+		{
+			System = 1,
+			Motor = 2
+		}
+
 		private delegate void ConnectionMessageReceivedDelegate();
+		private delegate void ResponseMessageReceivedDelegate(string line);
 
 		private SerialPort _comPort;
 
@@ -21,6 +28,7 @@ namespace Monitor.Service
 		private Thread _workerThread;
 
 		private event ConnectionMessageReceivedDelegate ConnectionMessageReceived;
+		private event ResponseMessageReceivedDelegate ResponseMessageReceived;
 
 		public bool IsRunning { get; private set; }
 
@@ -90,7 +98,7 @@ namespace Monitor.Service
 				while (!isConnected) { Thread.Sleep(10); }
 			});
 
-			_comPort.Write(buffer, 0, buffer.Length);
+			SendData(buffer);
 
 			if (Task.WhenAny(task, Task.Delay(500)).Result == task)
 			{
@@ -101,6 +109,58 @@ namespace Monitor.Service
 			{
 				this.ConnectionMessageReceived -= callback;
 				return false;
+			}
+		}
+
+		public int GetBatteryLevel(DroneBattery battery)
+		{
+			byte[] buffer = new[]
+			{
+				Convert.ToByte('B'),
+				Convert.ToByte((int)battery),
+			};
+
+			bool gotBatteryLevel = false;
+			int batteryLevel = 0;
+
+			ResponseMessageReceivedDelegate callback = (line) =>
+			{
+				if (line.Length > 2 && 
+					line[0] == 'B' && 
+					line[1] == (int)battery)
+				{
+					batteryLevel = line[2];
+					gotBatteryLevel = true;
+				}
+			};
+
+			this.ResponseMessageReceived += callback;
+
+			Task task = Task.Run(() =>
+			{
+				while (!gotBatteryLevel) { Thread.Sleep(10); }
+			});
+
+			SendData(buffer);
+
+			if (Task.WhenAny(task, Task.Delay(500)).Result == task)
+			{
+				this.ResponseMessageReceived -= callback;
+				return batteryLevel;
+			}
+			else
+			{
+				EventLog.WriteEntry(this.GetType().Name, $"Battery level couldn't be read: Timeout occurred");
+				this.ResponseMessageReceived -= callback;
+				return -1;
+			}
+		}
+
+		private void SendData(byte[] data)
+		{
+			if (!_serviceDone)
+			{
+				_comPort.Write(data, 0, data.Length);
 			}
 		}
 
@@ -137,11 +197,15 @@ namespace Monitor.Service
 		{
 			while(_comPort.IsOpen && _comPort.BytesToRead > 0)
 			{
-				string line = _comPort.ReadLine().TrimEnd();
+				string line = _comPort.ReadExisting().TrimEnd();
 
 				if (line == "Connected")
 				{
 					OnConnectionMessageReceived();
+				}
+				else
+				{
+					OnResponseReceived(line);
 				}
 			}
 		}
@@ -149,6 +213,11 @@ namespace Monitor.Service
 		private void OnConnectionMessageReceived()
 		{
 			ConnectionMessageReceived?.Invoke();
+		}
+
+		private void OnResponseReceived(string line)
+		{
+			ResponseMessageReceived?.Invoke(line);
 		}
 	}
 }

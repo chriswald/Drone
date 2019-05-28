@@ -4,3 +4,4 @@ obj/
 .vs/
 *.js
 *.js.map
+DroneBaseStation/Transmitter/.vscode/settings.json

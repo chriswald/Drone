@@ -77,14 +77,14 @@ namespace Monitor.Controllers
 
 		[HttpGet]
 		[Route("Drone")]
-		public int GetDroneBatteryFakePercent()
+		public int GetDroneBatteryPercent()
 		{
-			//try
-			//{
-			//	string response = SendPipeMessage(ServiceConfiguration.DroneBatteryCommand);
-			//	return (int)Enum.GetValues(typeof(BatteryLevel)).GetValue(int.Parse(response));
-			//}
-			//catch { }
+			try
+			{
+				ServiceController serviceController = new ServiceController();
+				return serviceController.BatteryLevel(RadioRelayService.DroneBattery.System);
+			}
+			catch { }
 
 			return 0;
 		}

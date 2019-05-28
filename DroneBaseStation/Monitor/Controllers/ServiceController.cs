@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Caching;
 using System.ServiceProcess;
 using System.Web.Http;
+using static Monitor.Service.RadioRelayService;
 using SP = System.ServiceProcess;
 
 namespace Monitor.Controllers
@@ -72,6 +73,21 @@ namespace Monitor.Controllers
 			else
 			{
 				return false;
+			}
+		}
+
+		[HttpGet]
+		[Route(nameof(BatteryLevel))]
+		public int BatteryLevel([FromBody] DroneBattery battery)
+		{
+			if (MemoryCache.Default.Contains(ServiceCacheName))
+			{
+				RadioRelayService service = (RadioRelayService)MemoryCache.Default.Get(ServiceCacheName);
+				return service.GetBatteryLevel(battery);
+			}
+			else
+			{
+				return 0;
 			}
 		}
 	}
