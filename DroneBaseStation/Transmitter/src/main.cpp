@@ -62,10 +62,7 @@ void SendRadioMessage(uint8_t* buffer, uint8_t byteCount)
     message[0] = 'B';
     message[1] = 1;
     
-    uint8_t *data = (uint8_t*)calloc(32, sizeof(uint8_t));
-    memcpy(data, message, strlen(message) + 1);
-    radio->send(data);
-    free(data);
+    SendString(message);
 }
 
 void ReturnConnectedPacket()
