@@ -2,14 +2,6 @@
 #include <SensorPins.h>
 #include <Radio.h>
 
-void SendString(char *message);
-void ReceiveString(char *message);
-
-void ProcessPacket(char messageType, uint8_t* buffer, size_t byteCount);
-void SendRadioMessage(uint8_t* buffer, size_t byteCount);
-void ReturnConnectedPacket();
-void ServerMessageReceived();
-
 Radio *radio;
 const int packetBufferSize = 32;
 uint8_t* packetBuffer;
