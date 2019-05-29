@@ -24,6 +24,10 @@
 		socket.onclose = function (): void { console.log("WebSocket closed"); }
 	}
 
+	/**
+	 * Event handler called when data is received from the server
+	 * @param data The data received
+	 */
 	private async ProcessSocketMessage(data: Blob): Promise<void> {
 		let array: Uint8Array = await this.BlobToArray(data);
 
@@ -32,6 +36,10 @@
 		}
 	}
 
+	/**
+	 * Convert the blob received from the server into an array of bytes
+	 * @param blob The data received from the server
+	 */
 	private BlobToArray(blob: Blob): Promise<Uint8Array> {
 		return new Promise<Uint8Array>(resolve => {
 			let fileReader: FileReader = new FileReader();

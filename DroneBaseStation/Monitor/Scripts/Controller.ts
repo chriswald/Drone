@@ -63,6 +63,31 @@ class Controller {
 		this._streamer.StreamControllerData();
 	}
 
+	/**
+	 * Check if a particular button is pressed
+	 * @param flagsToTest The buttons to check
+	 */
+	public ButtonIsPressed(flagsToTest: GamepadButtonFlags): boolean {
+		return !!(this._buttonFlags & flagsToTest);
+	}
+
+	/**
+	 * When the controller status is received, parse it into a 
+	 * manageable structure and use it to update the visualization
+	 * @param bytes The array of bytes received
+	 */
+	private async OnWebSocketMessageReceived(bytes: Uint8Array): Promise<void> {
+		this.ParseByteArray(bytes);
+
+		if (this._visualizer) {
+			this._visualizer.UpdateVisualization(this);
+		}
+	}
+
+	/**
+	 * Parse the byte array into a usable structure
+	 * @param bytes The array of bytes received
+	 */
 	public ParseByteArray(bytes: Uint8Array): void {
 		let byteIndex: number = 0;
 
@@ -92,40 +117,42 @@ class Controller {
 		// Battery level exists here but that's retrieved a different way
 	}
 
-	public ButtonIsPressed(flagsToTest: GamepadButtonFlags): boolean {
-		return !!(this._buttonFlags & flagsToTest);
-	}
-
-	private async OnWebSocketMessageReceived(bytes: Uint8Array): Promise<void> {
-		this.ParseByteArray(bytes);
-
-		if (this._visualizer) {
-			this._visualizer.UpdateVisualization(this);
-		}
-
-		if (this.ButtonIsPressed(GamepadButtonFlags.LeftShoulder)) {
-			console.log("Left Shoulder");
-		}
-		else if (this.ButtonIsPressed(GamepadButtonFlags.DPadDown)) {
-			console.log("D Pad Down");
-		}
-	}
-
+	/**
+	 * Get a float value from the array of bytes
+	 * @param bytes The byte array to get the float from
+	 * @param startByte The index of the first byte to turn into a float
+	 */
 	private GetFloat(bytes: Uint8Array, startByte: number): number {
 		let view: DataView = this.GetSliceView(bytes, startByte, this.FloatSize);
 		return view.getFloat32(0);
 	}
 
+	/**
+	 * Get an int value from the array of bytes
+	 * @param bytes The byte array to get the int from
+	 * @param startByte The index of the first byte to turn into an int
+	 */
 	private GetInt(bytes: Uint8Array, startByte: number): number {
 		let view: DataView = this.GetSliceView(bytes, startByte, this.IntSize);
 		return view.getInt32(0);
 	}
 
+	/**
+	 * Get a byte value from the array of bytes
+	 * @param bytes The byte array to get the byte from
+	 * @param startByte The index of the first byte to turn into a byte
+	 */
 	private GetByte(bytes: Uint8Array, startByte: number): number {
 		let view: DataView = this.GetSliceView(bytes, startByte, this.ByteSize);
 		return view.getUint8(0);
 	}
 
+	/**
+	 * Retrieve part of the byte array as a different data type
+	 * @param bytes The byte array to get the new data from
+	 * @param startByte	The index of the first byte to turn into the new type
+	 * @param sliceSize The number of bytes to retrieve
+	 */
 	private GetSliceView(bytes: Uint8Array, startByte: number, sliceSize: number): DataView {
 		let slice: Uint8Array;
 		let buffer: ArrayBuffer = new ArrayBuffer(sliceSize);
