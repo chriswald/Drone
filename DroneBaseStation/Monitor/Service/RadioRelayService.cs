@@ -253,9 +253,11 @@ namespace Monitor.Service
 		{
 			while(_comPort.IsOpen && _comPort.BytesToRead > 0)
 			{
-				string line = _comPort.ReadExisting().TrimEnd();
+				byte[] buffer = new byte[32];
+				_comPort.Read(buffer, 0, buffer.Length);
+				string line = System.Text.Encoding.Default.GetString(buffer);
 
-				if (line == "Connected")
+				if (line.StartsWith("Connected"))
 				{
 					OnConnectionMessageReceived();
 				}
