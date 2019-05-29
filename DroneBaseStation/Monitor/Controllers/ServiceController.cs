@@ -4,7 +4,6 @@ using System.Runtime.Caching;
 using System.ServiceProcess;
 using System.Web.Http;
 using static Monitor.Service.RadioRelayService;
-using SP = System.ServiceProcess;
 
 namespace Monitor.Controllers
 {
@@ -13,10 +12,6 @@ namespace Monitor.Controllers
 	{
 		private const string ServiceCacheName = nameof(RadioRelayService);
 
-		private static SP.ServiceController RetrieveService()
-		{
-			return new SP.ServiceController(ServiceConfiguration.ServiceName);
-		}
 
 		[HttpGet]
 		[Route(nameof(Status))]
