@@ -91,28 +91,28 @@ class Controller {
 	public ParseByteArray(bytes: Uint8Array): void {
 		let byteIndex: number = 0;
 
-		byteIndex += 2; // Skip the size byte and separator
+		byteIndex += 1; // Skip the size byte and separator
 
 		this._leftStickX = this.GetFloat(bytes, byteIndex);
-		byteIndex += this.FloatSize + 1; // Move past this float
+		byteIndex += this.FloatSize; // Move past this float
 
 		this._leftStickY = this.GetFloat(bytes, byteIndex);
-		byteIndex += this.FloatSize + 1; // Move past this float
+		byteIndex += this.FloatSize; // Move past this float
 
 		this._rightStickX = this.GetFloat(bytes, byteIndex);
-		byteIndex += this.FloatSize + 1; // Move past this float
+		byteIndex += this.FloatSize; // Move past this float
 
 		this._rightStickY = this.GetFloat(bytes, byteIndex);
-		byteIndex += this.FloatSize + 1; // Move past this float
+		byteIndex += this.FloatSize; // Move past this float
 
 		this._leftTrigger = this.GetByte(bytes, byteIndex);
-		byteIndex += this.ByteSize + 1; // Move past this byte
+		byteIndex += this.ByteSize; // Move past this byte
 
 		this._rightTrigger = this.GetByte(bytes, byteIndex);
-		byteIndex += this.ByteSize + 1; // Move past this byte
+		byteIndex += this.ByteSize; // Move past this byte
 
 		this._buttonFlags = this.GetInt(bytes, byteIndex);
-		byteIndex += this.IntSize + 1; // Move past this int
+		byteIndex += this.IntSize; // Move past this int
 
 		// Battery level exists here but that's retrieved a different way
 	}

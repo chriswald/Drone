@@ -58,7 +58,8 @@ namespace Monitor.Controllers
 
 					if (droneController.IsConnected)
 					{
-						await socket.SendAsync(new ArraySegment<byte>(droneController.GetBytes()), WebSocketMessageType.Binary, true, CancellationToken.None);
+						byte[] bytes = droneController.GetBytes();
+						await socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Binary, true, CancellationToken.None);
 						Thread.Sleep(10);
 					}
 					else
