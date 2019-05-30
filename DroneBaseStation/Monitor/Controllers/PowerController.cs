@@ -76,13 +76,27 @@ namespace Monitor.Controllers
 		}
 
 		[HttpGet]
-		[Route("Drone")]
-		public int GetDroneBatteryPercent()
+		[Route("DroneSystem")]
+		public int GetDroneSystemBatteryPercent()
 		{
 			try
 			{
 				ServiceController serviceController = new ServiceController();
 				return serviceController.BatteryLevel(RadioRelayService.DroneBattery.System);
+			}
+			catch { }
+
+			return 0;
+		}
+
+		[HttpGet]
+		[Route("DroneMotor")]
+		public int GetDroneMotorBatteryPercent()
+		{
+			try
+			{
+				ServiceController serviceController = new ServiceController();
+				return serviceController.BatteryLevel(RadioRelayService.DroneBattery.Motor);
 			}
 			catch { }
 

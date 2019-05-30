@@ -9,18 +9,20 @@ function Main(): void {
 	let controllerBattery: Battery = new Battery("Controller", "controllerBattery", BatteryLevel.Empty);
 	let laptopBattery: Battery = new Battery("Laptop", "laptopBattery", BatteryLevel.Empty);
 	let radioBattery: Battery = new Battery("Radio", "radioBattery", BatteryLevel.Empty);
-	let droneBattery: Battery = new Battery("Drone", "droneBattery", BatteryLevel.Empty);
+	let droneSystemBattery: Battery = new Battery("DroneSystem", "droneSystemBattery", BatteryLevel.Empty);
+	let droneMotorBattery: Battery = new Battery("DroneMotor", "droneMotorBattery", BatteryLevel.Empty);
 
 	// Configure the devices that need to be communicated with
 	let controllerDevice: ConnectedDevice = new ConnectedDevice("Controller", "controllerStatus");
 	let laptopDevice: ConnectedDevice = new ConnectedDevice("Laptop", "laptopStatus");
 	let radioDevice: ConnectedDevice = new ConnectedDevice("Radio", "radioStatus");
-	let droneDevice: ConnectedDevice = new ConnectedDevice("Drone", "droneStatus");
+	let droneSystemDevice: ConnectedDevice = new ConnectedDevice("DroneSystem", "droneSystemStatus");
+	let droneMotorDevice: ConnectedDevice = new ConnectedDevice("DroneMotor", "droneMotorStatus");
 
 	ListComPorts();
 	CheckServiceStatus();
-	UpdateBatteryLevels([controllerBattery, laptopBattery, radioBattery, droneBattery]);
-	UpdateConnectedDevices([controllerDevice, laptopDevice, radioDevice, droneDevice]);
+	UpdateBatteryLevels([controllerBattery, laptopBattery, radioBattery, droneSystemBattery, droneMotorBattery]);
+	UpdateConnectedDevices([controllerDevice, laptopDevice, radioDevice, droneSystemDevice, droneMotorDevice]);
 
 	// events
 	document.getElementById("refreshPorts").addEventListener("click", ListComPorts);

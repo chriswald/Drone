@@ -30,6 +30,7 @@
                 <img src="Content/Images/controller.svg" id="controller" class="svg" />
                 <img src="Content/Images/laptop.svg" id="laptop" class="svg" />
                 <img src="Content/Images/plane.svg" id="plane" class="svg" />
+                <img src="Content/Images/lightning.svg" id="lightning" class="svg" />
                 <img src="Content/Images/connected.svg" id="connected" class="svg" />
                 <img src="Content/Images/radio.svg" id="radio" class="svg" />
             </div>
@@ -70,8 +71,15 @@
                 <tr>
                     <td><svg class="svg"><use href="#plane"></use></svg></td>
                     <td><span>Drone</span></td>
-                    <td><div id="droneStatus"></div></td>
-                    <td><div id="droneBattery"></div></td>
+                    <td><div id="droneSystemStatus"></div></td>
+                    <td><div id="droneSystemBattery"></div></td>
+                </tr>
+
+                <tr>
+                    <td><svg class="svg"><use href="#lightning"></use></svg></td>
+                    <td><span>Drone Motor</span></td>
+                    <td><div id="droneMotorStatus"></div></td>
+                    <td><div id="droneMotorBattery"></div></td>
                 </tr>
             </table>
 

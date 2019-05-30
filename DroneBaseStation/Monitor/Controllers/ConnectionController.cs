@@ -32,8 +32,15 @@ namespace Monitor.Controllers
 		}
 
 		[HttpGet]
-		[Route("Drone")]
-		public bool GetDroneConnectedStatus()
+		[Route("DroneSystem")]
+		public bool GetDroneSystemConnectedStatus()
+		{
+			return false;
+		}
+
+		[HttpGet]
+		[Route("DroneMotors")]
+		public bool GetDroneMotorsConnectedStatus()
 		{
 			return false;
 		}
