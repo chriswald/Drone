@@ -86,7 +86,7 @@ class Battery {
 	}
 
 	public static BatteryPercentToLevel(percent: number): BatteryLevel {
-		if (percent < 15) {
+		if (percent < 10) {
 			return BatteryLevel.Empty;
 		}
 		else if (percent < 40) {

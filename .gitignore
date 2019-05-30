@@ -7,3 +7,4 @@ obj/
 DroneBaseStation/Transmitter/.vscode/settings.json
 *.ipch
 DroneBaseStation/Transmitter/.vscode/ipch/
+Test/Test Battery/.vscode/ipch/
