@@ -3,12 +3,11 @@
 
 #include <Arduino.h>
 
-void ProcessPacket(char messageType, byte* buffer, size_t byteCount);
-void SendRadioMessage(byte* buffer, size_t byteCount);
+void ProcessPacket(char messageType, uint8_t* buffer, size_t byteCount);
+void SendRadioMessage(uint8_t* buffer, size_t byteCount);
+void ReceiveRadioMessage(uint8_t* buffer);
 void ReturnConnectedPacket();
 void ServerMessageReceived();
 
-void SendString(char *message);
-void ReceiveString(char *message);
 
 #endif // __MAIN_H__

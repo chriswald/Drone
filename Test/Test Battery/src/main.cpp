@@ -43,9 +43,6 @@ void ClientMessageReceived()
         memset(radioReceiveBuffer, 0, packetBufferSize);
         ReceiveData(radioReceiveBuffer);
 
-        Serial.print("Test Echo received: ");
-        Serial.println((char*)radioReceiveBuffer);
-
         ProcessMessage(radioReceiveBuffer);
     }
 }
@@ -91,9 +88,6 @@ void ProcessMessage(uint8_t *data)
         }
 
         radioSendBuffer[2] = batteryLevel;
-
-        Serial.print("Test Echo sending: ");
-        Serial.println((char*)radioSendBuffer);
 
         SendData(radioSendBuffer);
     }

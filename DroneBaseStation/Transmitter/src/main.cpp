@@ -58,15 +58,6 @@ void ProcessPacket(char messageType, uint8_t* buffer, size_t byteCount)
     }
 }
 
-void SendRadioMessage(uint8_t* buffer, size_t byteCount)
-{
-    char message[2];
-    message[0] = 'B';
-    message[1] = 1;
-    
-    SendString(message);
-}
-
 void ReturnConnectedPacket()
 {
     Serial.println("Connected");
@@ -76,23 +67,20 @@ void ServerMessageReceived()
 {
     while (radio->dataReady())
     {
-        char message[packetBufferSize];
-        ReceiveString(message);
-        Serial.println(message);
+        ReceiveRadioMessage(radioReceiveBuffer);
+        Serial.println((char*)radioReceiveBuffer);
     }
 }
 
-void SendString(char *message)
+void SendRadioMessage(uint8_t* buffer, size_t byteCount)
 {
-    size_t messageLength = strlen(message) + 1;
     memset(radioSendBuffer, 0, packetBufferSize);
-    memcpy(radioSendBuffer, message, messageLength);
+    memcpy(radioSendBuffer, buffer, byteCount);
     radio->send(radioSendBuffer);
 }
 
-void ReceiveString(char *message)
+void ReceiveRadioMessage(uint8_t* buffer)
 {
-    memset(radioReceiveBuffer, 0, packetBufferSize);
-    radio->get(radioReceiveBuffer);
-    memcpy(message, radioReceiveBuffer, packetBufferSize);
+    memset(buffer, 0, packetBufferSize);
+    radio->get(buffer);
 }
