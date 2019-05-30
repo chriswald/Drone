@@ -21,8 +21,22 @@ function Main(): void {
 
 	ListComPorts();
 	CheckServiceStatus();
-	UpdateBatteryLevels([controllerBattery, laptopBattery, radioBattery, droneSystemBattery, droneMotorBattery]);
-	UpdateConnectedDevices([controllerDevice, laptopDevice, radioDevice, droneSystemDevice, droneMotorDevice]);
+
+	UpdateBatteryLevels([
+		controllerBattery,
+		laptopBattery,
+		radioBattery,
+		droneSystemBattery,
+		droneMotorBattery
+	]);
+
+	UpdateConnectedDevices([
+		controllerDevice,
+		laptopDevice,
+		radioDevice,
+		droneSystemDevice,
+		droneMotorDevice
+	]);
 
 	// events
 	document.getElementById("refreshPorts").addEventListener("click", ListComPorts);
