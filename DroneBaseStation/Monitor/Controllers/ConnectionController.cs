@@ -39,7 +39,7 @@ namespace Monitor.Controllers
 		}
 
 		[HttpGet]
-		[Route("DroneMotors")]
+		[Route("DroneMotor")]
 		public bool GetDroneMotorsConnectedStatus()
 		{
 			return false;
