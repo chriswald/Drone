@@ -8,3 +8,5 @@ multiple connected systems:
  * The PC software reads a connected XBox controller and sends commands to the drone via the transmitter 
    and also provides a web-based dashboard for monitoring the statuses of all connected systems (controller,
    PC, transmitter, and drone)
+
+The Radio folder contains radio communication examples.
