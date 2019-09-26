@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2047
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneController", "DroneController\DroneController.csproj", "{202F2D44-9559-4E91-BD77-4D699B6BA158}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitor", "Monitor\Monitor.csproj", "{3F2FCFF0-DD54-44A6-BBCB-871CB9E8CF80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{202F2D44-9559-4E91-BD77-4D699B6BA158} = {202F2D44-9559-4E91-BD77-4D699B6BA158}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
